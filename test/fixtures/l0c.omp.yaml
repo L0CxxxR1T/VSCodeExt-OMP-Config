@@ -1,0 +1,90 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+version: 4
+final_space: true
+patch_pwsh_bleed: true
+enable_cursor_positioning: true
+
+blocks:
+  # 右端まで埋める空ブロック(改行の代わり・視認性向上)
+  - type: prompt
+    alignment: left
+    overflow: hide
+    filler: ''
+    newline: true
+    force: true
+    segments: []
+
+  - type: prompt
+    alignment: left
+    overflow: hide
+    newline: true
+    segments:
+      - type: session
+        style: plain
+        foreground: p:base
+        foreground_templates:
+          - '{{if .Root}}p:rd{{end}}'
+        template: '{{if .Root}}󰕥{{else}}󰦜{{end}} <b>{{.UserName}}</b> '
+      - type: text
+        style: plain
+        foreground: p:sub
+        template: '󰄾'
+      - type: path
+        style: plain
+        foreground: p:base
+        template: ' {{.Location}}'
+        options:
+          style: full
+          folder_separator_icon: /
+          home_icon: '󰋞'
+          right_format: '<#fff><b>%s</b></>'
+
+  - type: prompt
+    alignment: right
+    newline: false
+    segments:
+      - type: git
+        style: plain
+        foreground: '#000'
+        background: p:gn
+        background_templates:
+          - '{{if or (.Working.Changed) (.Staging.Changed)}}p:yw{{end}}'
+          - '{{if and (gt .Ahead 0) (gt .Behind 0)}}p:warn{{end}}'
+          - '{{if gt .Ahead 0}}p:vl{{end}}'
+          - '{{if gt .Behind 0}}p:sk{{end}}'
+        template: ' {{url .UpstreamIcon .UpstreamURL}} {{.HEAD}} {{.RepoName}} '
+        options:
+          branch_icon: '󰘬 '
+          branch_gone_icon: '󱄶 '
+          github_icon: '󰊤'
+          mapped_branches:
+            feature/*: '󱓞 '
+
+  - type: prompt
+    alignment: left
+    newline: true
+    segments:
+      - type: docker
+        style: plain
+        foreground: p:sk
+        template: '󰡨 {{.Context}}'
+        options:
+          display_mode: context
+      - type: text
+        style: plain
+        foreground: p:sub
+        template: ' 󰅂'
+
+palette:
+  base: '#bbbec7'
+  sub: '#8f939c'
+  rd: '#f07fa1'
+  og: '#f5ac70'
+  yw: '#f7e582'
+  gn: '#7fc594'
+  sk: '#75acff'
+  vl: '#a775ff'
+  pk: '#f8a2d1'
+  cld: '#d97757'
+  warn: '#ffca58'
+  danger: '#ff3874'

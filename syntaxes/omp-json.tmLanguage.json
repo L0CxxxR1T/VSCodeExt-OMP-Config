@@ -1,0 +1,5 @@
+{
+  "name": "Oh My Posh (JSON)",
+  "scopeName": "source.omp.json",
+  "patterns": [{ "include": "source.json" }]
+}

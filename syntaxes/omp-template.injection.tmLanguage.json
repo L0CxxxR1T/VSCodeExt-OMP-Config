@@ -1,0 +1,118 @@
+{
+  "scopeName": "source.omp.template-injection",
+  "injectionSelector": "L:source.omp.json string.quoted.double.json, L:source.omp.yaml string.quoted, L:source.omp.yaml string.unquoted, L:source.omp.toml string",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#template"
+    },
+    {
+      "include": "#color-tag"
+    },
+    {
+      "include": "#palette-ref"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "match": "\\{\\{-?\\s*/\\*.*?\\*/\\s*-?\\}\\}",
+      "name": "comment.block.go-template"
+    },
+    "template": {
+      "begin": "\\{\\{-?",
+      "end": "-?\\}\\}|(?=(?<!\\\\)[\"'])|$",
+      "applyEndPatternLast": true,
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.begin.go-template"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.end.go-template"
+        }
+      },
+      "name": "meta.embedded.inline.go-template",
+      "patterns": [
+        {
+          "match": "\\\\\"(?:[^\"\\\\]|\\\\[^\"])*\\\\\"",
+          "name": "string.quoted.double.go-template"
+        },
+        {
+          "match": "\"(?:[^\"\\\\]|\\\\.)*\"",
+          "name": "string.quoted.double.go-template"
+        },
+        {
+          "match": "`[^`]*`",
+          "name": "string.quoted.raw.go-template"
+        },
+        {
+          "match": "\\b(?:if|else|end|range|with|define|template|block|break|continue)\\b",
+          "name": "keyword.control.go-template"
+        },
+        {
+          "match": "\\b(?:true|false|nil)\\b",
+          "name": "constant.language.go-template"
+        },
+        {
+          "match": "-?\\b\\d+(?:\\.\\d+)?\\b",
+          "name": "constant.numeric.go-template"
+        },
+        {
+          "match": "\\$[A-Za-z_]\\w*|\\$",
+          "name": "variable.other.go-template"
+        },
+        {
+          "match": "\\.[A-Za-z_]\\w*",
+          "name": "variable.other.property.go-template"
+        },
+        {
+          "match": "\\.(?!\\w)",
+          "name": "variable.language.dot.go-template"
+        },
+        {
+          "match": "\\b[A-Za-z_]\\w*\\b",
+          "name": "support.function.go-template"
+        },
+        {
+          "match": ":=|=|\\|",
+          "name": "keyword.operator.go-template"
+        },
+        {
+          "match": "[()]",
+          "name": "punctuation.parenthesis.go-template"
+        }
+      ]
+    },
+    "color-tag": {
+      "match": "(<)(/?)((?:#[0-9A-Fa-f]{3,6}|p:[\\w.-]+|[A-Za-z]+)?(?:,(?:#[0-9A-Fa-f]{3,6}|p:[\\w.-]+|[A-Za-z]+))?)(>)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.omp"
+        },
+        "2": {
+          "name": "punctuation.definition.tag.omp"
+        },
+        "3": {
+          "name": "entity.name.tag.omp"
+        },
+        "4": {
+          "name": "punctuation.definition.tag.end.omp"
+        }
+      }
+    },
+    "palette-ref": {
+      "match": "(?<![\\w:/.])(p:)([\\w-]+(?:\\.[\\w-]+)*)",
+      "captures": {
+        "1": {
+          "name": "storage.modifier.palette.omp"
+        },
+        "2": {
+          "name": "variable.other.constant.palette.omp"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Oh My Posh (YAML)",
+  "scopeName": "source.omp.yaml",
+  "patterns": [{ "include": "source.yaml" }]
+}

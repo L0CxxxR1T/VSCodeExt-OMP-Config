@@ -1,0 +1,159 @@
+{
+  "name": "oh-my-posh-config",
+  "displayName": "Oh My Posh Config",
+  "description": "Oh My Posh の設定ファイル（JSON / YAML / TOML）を検証・補完し、テンプレートとパレット参照を扱いやすくします。",
+  "version": "0.1.0",
+  "publisher": "l0c-r1t",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "oh-my-posh",
+    "prompt",
+    "theme"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "languages": [
+      {
+        "id": "omp-json",
+        "aliases": [
+          "Oh My Posh (JSON)"
+        ],
+        "extensions": [
+          ".omp.json",
+          ".omp.jsonc"
+        ],
+        "configuration": "./language-configuration/json.json"
+      },
+      {
+        "id": "omp-yaml",
+        "aliases": [
+          "Oh My Posh (YAML)"
+        ],
+        "extensions": [
+          ".omp.yaml",
+          ".omp.yml"
+        ],
+        "configuration": "./language-configuration/yaml.json"
+      },
+      {
+        "id": "omp-toml",
+        "aliases": [
+          "Oh My Posh (TOML)"
+        ],
+        "extensions": [
+          ".omp.toml"
+        ],
+        "configuration": "./language-configuration/toml.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "omp-json",
+        "scopeName": "source.omp.json",
+        "path": "./syntaxes/omp-json.tmLanguage.json"
+      },
+      {
+        "language": "omp-yaml",
+        "scopeName": "source.omp.yaml",
+        "path": "./syntaxes/omp-yaml.tmLanguage.json"
+      },
+      {
+        "language": "omp-toml",
+        "scopeName": "source.omp.toml",
+        "path": "./syntaxes/omp-toml.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.omp.template-injection",
+        "path": "./syntaxes/omp-template.injection.tmLanguage.json",
+        "injectTo": [
+          "source.omp.json",
+          "source.omp.yaml",
+          "source.omp.toml"
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "ohMyPosh.useAsConfig",
+        "title": "現在のファイルを Oh My Posh 設定として扱う",
+        "category": "Oh My Posh"
+      },
+      {
+        "command": "ohMyPosh.revertLanguage",
+        "title": "Oh My Posh 設定としての扱いを解除する",
+        "category": "Oh My Posh"
+      },
+      {
+        "command": "ohMyPosh.updateSchema",
+        "title": "スキーマを最新版に更新する",
+        "category": "Oh My Posh"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "ohMyPosh.useAsConfig",
+          "when": "editorIsOpen && editorLangId != omp-json && editorLangId != omp-yaml && editorLangId != omp-toml"
+        },
+        {
+          "command": "ohMyPosh.revertLanguage",
+          "when": "editorLangId == omp-json || editorLangId == omp-yaml || editorLangId == omp-toml"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Oh My Posh",
+      "properties": {
+        "ohMyPosh.validate.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "スキーマに基づく検証を行います。"
+        },
+        "ohMyPosh.palette.warnUndefined": {
+          "type": "boolean",
+          "default": true,
+          "description": "パレットに定義されていない p:名前 の参照を警告します。"
+        },
+        "ohMyPosh.schema.url": {
+          "type": "string",
+          "default": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+          "description": "「スキーマを最新版に更新する」コマンドでダウンロードするスキーマの URL です。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "grammars": "node scripts/build-grammars.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:integration": "node esbuild.mjs && node test/integration/run.mjs",
+    "package": "vsce package --no-dependencies --skip-license --allow-missing-repository",
+    "vscode:prepublish": "node esbuild.mjs --production"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "jsonc-parser": "^3.3.1",
+    "toml-eslint-parser": "^1.0.3",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@types/vscode": "1.90.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^4.1.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.3.2"
+  }
+}

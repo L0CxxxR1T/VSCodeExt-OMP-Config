@@ -1,0 +1,103 @@
+version = 4
+final_space = true
+patch_pwsh_bleed = true
+enable_cursor_positioning = true
+
+[palette]
+  base = '#bbbec7'
+  cld = '#d97757'
+  danger = '#ff3874'
+  gn = '#7fc594'
+  og = '#f5ac70'
+  pk = '#f8a2d1'
+  rd = '#f07fa1'
+  sk = '#75acff'
+  sub = '#8f939c'
+  vl = '#a775ff'
+  warn = '#ffca58'
+  yw = '#f7e582'
+
+[upgrade]
+  source = 'cdn'
+  interval = '168h'
+  auto = false
+  notice = false
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  overflow = 'hide'
+  newline = true
+  force = true
+  segments = []
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  overflow = 'hide'
+  newline = true
+
+  [[blocks.segments]]
+    template = '{{if .Root}}󰕥{{else}}󰦜{{end}} <b>{{.UserName}}</b> '
+    foreground = 'p:base'
+    type = 'session'
+    style = 'plain'
+    foreground_templates = ['{{if .Root}}p:rd{{end}}']
+
+  [[blocks.segments]]
+    template = '󰄾'
+    foreground = 'p:sub'
+    type = 'text'
+    style = 'plain'
+
+  [[blocks.segments]]
+    template = ' {{.Location}}'
+    foreground = 'p:base'
+    type = 'path'
+    style = 'plain'
+
+    [blocks.segments.options]
+      folder_separator_icon = '/'
+      home_icon = '󰋞'
+      right_format = '<#fff><b>%s</b></>'
+      style = 'full'
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'right'
+
+  [[blocks.segments]]
+    template = ' {{url .UpstreamIcon .UpstreamURL}} {{.HEAD}} {{.RepoName}} '
+    foreground = '#000'
+    background = 'p:gn'
+    type = 'git'
+    style = 'plain'
+    background_templates = ['{{if or (.Working.Changed) (.Staging.Changed)}}p:yw{{end}}', '{{if and (gt .Ahead 0) (gt .Behind 0)}}p:warn{{end}}', '{{if gt .Ahead 0}}p:vl{{end}}', '{{if gt .Behind 0}}p:sk{{end}}']
+
+    [blocks.segments.options]
+      branch_gone_icon = '󱄶 '
+      branch_icon = '󰘬 '
+      github_icon = '󰊤'
+
+      [blocks.segments.options.mapped_branches]
+        'feature/*' = '󱓞 '
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
+  [[blocks.segments]]
+    template = '󰡨 {{.Context}}'
+    foreground = 'p:sk'
+    type = 'docker'
+    style = 'plain'
+
+    [blocks.segments.options]
+      display_mode = 'context'
+
+  [[blocks.segments]]
+    template = ' 󰅂'
+    foreground = 'p:sub'
+    type = 'text'
+    style = 'plain'
