@@ -1,0 +1,68 @@
+name: Marketplace に公開
+
+on:
+  push:
+    # 公開用ブランチ名が決まったらここを書き換える
+    branches: [release]
+  workflow_dispatch:
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run typecheck
+
+      - run: npm test
+
+      # 拡張ホストは画面がないと起動しないため仮想ディスプレイで動かす
+      - run: xvfb-run -a npm run test:integration
+
+      - name: バージョンの確認
+        id: version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$version" > /dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::v$version は公開済みのため、公開をスキップします。package.json の version を上げてください。"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: パッケージ作成
+        if: steps.version.outputs.exists == 'false'
+        run: npm run package -- --out "oh-my-posh-config-${{ steps.version.outputs.version }}.vsix"
+
+      # タグ作成より先に公開するので、途中で失敗して再実行したときに重複エラーで止まらないようにする
+      - name: Marketplace に公開
+        if: steps.version.outputs.exists == 'false'
+        run: npx vsce publish --skip-duplicate --packagePath "oh-my-posh-config-${{ steps.version.outputs.version }}.vsix"
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - name: GitHub Release 作成
+        if: steps.version.outputs.exists == 'false'
+        run: >
+          gh release create "v${{ steps.version.outputs.version }}"
+          "oh-my-posh-config-${{ steps.version.outputs.version }}.vsix"
+          --target "$GITHUB_SHA"
+          --title "v${{ steps.version.outputs.version }}"
+          --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
