@@ -2,7 +2,6 @@ name: Marketplace に公開
 
 on:
   push:
-    # 公開用ブランチ名が決まったらここを書き換える
     branches: [release]
   workflow_dispatch:
 
