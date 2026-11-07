@@ -4,6 +4,7 @@
   "description": "Oh My Posh の設定ファイル（JSON / YAML / TOML）を検証・補完し、テンプレートとパレット参照を扱いやすくします。",
   "version": "0.1.0",
   "publisher": "l0c-r1t",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -136,7 +137,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:integration": "node esbuild.mjs && node test/integration/run.mjs",
-    "package": "vsce package --no-dependencies --skip-license --allow-missing-repository",
+    "package": "vsce package --no-dependencies --allow-missing-repository",
     "vscode:prepublish": "node esbuild.mjs --production"
   },
   "dependencies": {
