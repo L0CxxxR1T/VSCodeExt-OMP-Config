@@ -3,8 +3,16 @@
   "displayName": "Oh My Posh Config",
   "description": "Oh My Posh の設定ファイル（JSON / YAML / TOML）を検証・補完し、テンプレートとパレット参照を扱いやすくします。",
   "version": "0.1.0",
-  "publisher": "l0c-r1t",
+  "publisher": "xxxL0C",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/L0CxxxR1T/VSCodeExt-OMP-Config.git"
+  },
+  "bugs": {
+    "url": "https://github.com/L0CxxxR1T/VSCodeExt-OMP-Config/issues"
+  },
+  "homepage": "https://github.com/L0CxxxR1T/VSCodeExt-OMP-Config#readme",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -137,7 +145,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:integration": "node esbuild.mjs && node test/integration/run.mjs",
-    "package": "vsce package --no-dependencies --allow-missing-repository",
+    "package": "vsce package --no-dependencies",
     "vscode:prepublish": "node esbuild.mjs --production"
   },
   "dependencies": {
