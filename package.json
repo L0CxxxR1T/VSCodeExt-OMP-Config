@@ -2,7 +2,7 @@
   "name": "omp-config",
   "displayName": "[Oh My Posh] Config Utility",
   "description": "Oh My Posh の設定ファイル（JSON / YAML / TOML）を検証・補完し、テンプレートとパレット参照を扱いやすくします。",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "xxxL0C",
   "license": "MIT",
   "repository": {
