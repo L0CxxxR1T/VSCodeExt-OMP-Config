@@ -11,10 +11,13 @@ concurrency:
 
 permissions:
   contents: write
+  # Marketplace の Trusted Publishing で OIDC トークンを要求するため
+  id-token: write
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: marketplace
     steps:
       - uses: actions/checkout@v5
 
@@ -51,9 +54,7 @@ jobs:
       # タグ作成より先に公開するので、途中で失敗して再実行したときに重複エラーで止まらないようにする
       - name: Marketplace に公開
         if: steps.version.outputs.exists == 'false'
-        run: npx vsce publish --skip-duplicate --packagePath "oh-my-posh-config-${{ steps.version.outputs.version }}.vsix"
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: npx vsce publish --oidc --skip-duplicate --packagePath "oh-my-posh-config-${{ steps.version.outputs.version }}.vsix"
 
       - name: GitHub Release 作成
         if: steps.version.outputs.exists == 'false'
